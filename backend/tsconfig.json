@@ -1,0 +1,14 @@
+// backend/tsconfig.json
+{
+  "compilerOptions": {
+    "target": "es2020", // Node.js moderno
+    "module": "commonjs", // Padrão do Node
+    "rootDir": "./src", // Onde seus arquivos .ts estão
+    "outDir": "./dist", // Onde o .js compilado irá
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true, // Habilitar checagem estrita
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"] // Apenas compilar o que está em src
+}
