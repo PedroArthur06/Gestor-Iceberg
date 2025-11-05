@@ -1,6 +1,6 @@
 export type StatusOrcamento =
   | "Pendente"
-  | "Comprovado"
+  | "Aprovado"
   | "Concluído"
   | "Recusado";
 
