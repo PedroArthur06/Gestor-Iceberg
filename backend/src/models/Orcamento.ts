@@ -11,7 +11,6 @@ export interface IItemServico {
   valor: number;
 }
 
-// Interface para o documento Mongoose (inclui o 'id' do frontend)
 export interface IOrcamento extends Document {
   id: string; // Mapeado do _id
   cliente: string;
@@ -31,7 +30,7 @@ const ItemServicoSchema = new Schema<IItemServico>(
     valor: { type: Number, required: true },
   },
   { _id: false }
-); // Não gere _id para subdocumentos
+);
 
 const OrcamentoSchema = new Schema<IOrcamento>(
   {
@@ -51,8 +50,11 @@ const OrcamentoSchema = new Schema<IOrcamento>(
   {
     // Configura a transformação do JSON para mapear _id para id
     toJSON: {
-      transform: (doc, ret) => {
-        ret.id = ret._id;
+      transform: (doc: any, ret: any) => {
+        // 1. Converte o ObjectId `_id` para uma string em `id`
+        ret.id = ret._id.toString();
+
+        // 2. Tipar `ret` como `any` nos permite usar o delete
         delete ret._id;
         delete ret.__v;
       },
