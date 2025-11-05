@@ -18,7 +18,7 @@ import { GlassCard } from "../../src/components/GlassCard";
 import { ItemServico } from "../../src/types";
 import { COLORS } from "../../src/constants/colors";
 import { formatarMoeda } from "../../src/utils/formatters";
-import { calcularTotal } from "../../src/utils/calculations";
+import { calcularTotal } from "../../src/utils/calculation";
 
 export default function NovoScreen() {
   const router = useRouter();

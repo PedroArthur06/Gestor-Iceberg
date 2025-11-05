@@ -14,7 +14,7 @@ import { OrcamentoCard } from "../../src/components/OrcamentoCard";
 import { GlassCard } from "../../src/components/GlassCard";
 import { COLORS } from "../../src/constants/colors";
 import { formatarMoeda } from "../../src/utils/formatters";
-import { obterEstatisticas } from "../../src/utils/calculations";
+import { obterEstatisticas } from "../../src/utils/calculation";
 
 export default function InicioScreen() {
   const router = useRouter();
@@ -150,7 +150,7 @@ export default function InicioScreen() {
             <GlassCard>
               <Text style={styles.emptyText}>Nenhum orçamento ainda</Text>
               <Text style={styles.emptySubtext}>
-                Clique em "Novo" para criar seu primeiro orçamento
+                Clique em &quot;Novo&quot; para criar seu primeiro orçamento
               </Text>
             </GlassCard>
           )}

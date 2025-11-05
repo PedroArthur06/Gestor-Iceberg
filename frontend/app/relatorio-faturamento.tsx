@@ -16,7 +16,7 @@ import {
   calcularFaturamento,
   filtrarPorPeriodo,
   calcularTotal,
-} from "../src/utils/calculations";
+} from "../src/utils/calculation";
 
 const PERIODOS = [
   { label: "Esta Semana", dias: 7 },

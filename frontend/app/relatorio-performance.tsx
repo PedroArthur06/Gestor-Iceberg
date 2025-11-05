@@ -13,7 +13,7 @@ import { PieChart } from "react-native-gifted-charts";
 import { useOrcamentoStore } from "../src/store/orcamentoStore";
 import { GlassCard } from "../src/components/GlassCard";
 import { COLORS } from "../src/constants/colors";
-import { obterEstatisticas } from "../src/utils/calculations";
+import { obterEstatisticas } from "../src/utils/calculation";
 
 const { width } = Dimensions.get("window");
 

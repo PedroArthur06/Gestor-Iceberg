@@ -27,7 +27,7 @@ export default function OrcamentosScreen() {
   const statusOptions: (StatusOrcamento | "Todos")[] = [
     "Todos",
     "Pendente",
-    "Comprovado",
+    "Aprovado",
     "Concluído",
     "Recusado",
   ];

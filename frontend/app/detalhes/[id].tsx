@@ -9,6 +9,7 @@ import {
   Alert,
   ActionSheetIOS,
   Platform,
+  AlertButton,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -22,7 +23,7 @@ import {
   formatarMoeda,
   formatarTelefone,
 } from "../../src/utils/formatters";
-import { calcularTotal } from "../../src/utils/calculations";
+import { calcularTotal } from "../../src/utils/calculation";
 import { compartilharWhatsApp } from "../../src/utils/whatsapp";
 
 export default function DetalhesScreen() {
@@ -57,7 +58,7 @@ export default function DetalhesScreen() {
 
   const statusOptions: StatusOrcamento[] = [
     "Pendente",
-    "Comprovado",
+    "Aprovado",
     "Concluído",
     "Recusado",
   ];
@@ -78,16 +79,20 @@ export default function DetalhesScreen() {
         }
       );
     } else {
-      // Android - usar Alert
+      const statusBotoes: AlertButton[] = statusOptions.map((status) => ({
+        text: status,
+        onPress: () => atualizarStatus(status),
+      }));
+
+      // 2. Adiciona o botão "Cancelar" ao array
+      const todosBotoes = statusBotoes.concat([
+        { text: "Cancelar", style: "cancel" },
+      ]);
+
       Alert.alert(
         "Alterar Status",
         "Escolha o novo status do orçamento:",
-        statusOptions
-          .map((status) => ({
-            text: status,
-            onPress: () => atualizarStatus(status),
-          }))
-          .concat([{ text: "Cancelar", style: "cancel" }])
+        todosBotoes // <-- Passa o array corrigido
       );
     }
   };
