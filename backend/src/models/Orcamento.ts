@@ -2,7 +2,7 @@ import mongoose, { Document, Schema, Model } from "mongoose";
 
 export type StatusOrcamento =
   | "Pendente"
-  | "Comprovado"
+  | "Aprovado"
   | "Concluído"
   | "Recusado";
 
@@ -40,7 +40,7 @@ const OrcamentoSchema = new Schema<IOrcamento>(
     data: { type: String, default: () => new Date().toISOString() },
     status: {
       type: String,
-      enum: ["Pendente", "Comprovado", "Concluído", "Recusado"],
+      enum: ["Pendente", "Aprovado", "Concluído", "Recusado"],
       default: "Pendente",
     },
     itensServico: [ItemServicoSchema],
