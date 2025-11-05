@@ -2,7 +2,7 @@
 import { Linking } from "react-native";
 import { Orcamento } from "../types";
 import { formatarMoeda, formatarData } from "./formatters";
-import { calcularTotal } from "./calculations";
+import { calcularTotal } from "./calculation";
 
 export const gerarTextoOrcamento = (orcamento: Orcamento): string => {
   const total = calcularTotal(orcamento.itensServico);
