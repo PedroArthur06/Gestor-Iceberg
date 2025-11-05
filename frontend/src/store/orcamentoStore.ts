@@ -1,14 +1,14 @@
-// Store Zustand para gerenciamento de estado
 import { create } from "zustand";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Orcamento, ItemServico } from "../types";
-import { MOCK_ORCAMENTOS } from "../constants/mockData";
+import { Orcamento } from "../types";
+import api from "../services/api";
 
 interface OrcamentoStore {
   orcamentos: Orcamento[];
   carregando: boolean;
   carregarOrcamentos: () => Promise<void>;
-  adicionarOrcamento: (orcamento: Omit<Orcamento, "id">) => Promise<void>;
+  adicionarOrcamento: (
+    orcamento: Omit<Orcamento, "id" | "dataConclusao">
+  ) => Promise<void>;
   atualizarOrcamento: (
     id: string,
     orcamento: Partial<Orcamento>
@@ -17,8 +17,6 @@ interface OrcamentoStore {
   deletarOrcamento: (id: string) => Promise<void>;
 }
 
-const STORAGE_KEY = "@GestorIceberg:orcamentos";
-
 export const useOrcamentoStore = create<OrcamentoStore>((set, get) => ({
   orcamentos: [],
   carregando: false,
@@ -26,31 +24,22 @@ export const useOrcamentoStore = create<OrcamentoStore>((set, get) => ({
   carregarOrcamentos: async () => {
     set({ carregando: true });
     try {
-      const data = await AsyncStorage.getItem(STORAGE_KEY);
-      if (data) {
-        set({ orcamentos: JSON.parse(data), carregando: false });
-      } else {
-        // Primeira vez - usar dados mock
-        await AsyncStorage.setItem(
-          STORAGE_KEY,
-          JSON.stringify(MOCK_ORCAMENTOS)
-        );
-        set({ orcamentos: MOCK_ORCAMENTOS, carregando: false });
-      }
+      const response = await api.get<Orcamento[]>("/orcamentos");
+      set({ orcamentos: response.data || [], carregando: false });
     } catch (error) {
       console.error("Erro ao carregar orçamentos:", error);
-      set({ orcamentos: MOCK_ORCAMENTOS, carregando: false });
+      set({ carregando: false, orcamentos: [] });
     }
   },
 
   adicionarOrcamento: async (novoOrcamento) => {
-    const id = Date.now().toString();
-    const orcamento: Orcamento = { ...novoOrcamento, id };
-    const novosOrcamentos = [...get().orcamentos, orcamento];
-
     try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novosOrcamentos));
-      set({ orcamentos: novosOrcamentos });
+      // O 'data' já está sendo setado no frontend ou no backend (default)
+      const response = await api.post<Orcamento>("/orcamentos", novoOrcamento);
+      const orcamentoCriado = response.data;
+      set((state) => ({
+        orcamentos: [...state.orcamentos, orcamentoCriado],
+      }));
     } catch (error) {
       console.error("Erro ao adicionar orçamento:", error);
       throw error;
@@ -58,14 +47,18 @@ export const useOrcamentoStore = create<OrcamentoStore>((set, get) => ({
   },
 
   atualizarOrcamento: async (id, atualizacao) => {
-    const orcamentos = get().orcamentos;
-    const novosOrcamentos = orcamentos.map((orc) =>
-      orc.id === id ? { ...orc, ...atualizacao } : orc
-    );
-
     try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novosOrcamentos));
-      set({ orcamentos: novosOrcamentos });
+      const response = await api.put<Orcamento>(
+        `/orcamentos/${id}`,
+        atualizacao
+      );
+      const orcamentoAtualizado = response.data;
+
+      set((state) => ({
+        orcamentos: state.orcamentos.map((orc) =>
+          orc.id === id ? orcamentoAtualizado : orc
+        ),
+      }));
     } catch (error) {
       console.error("Erro ao atualizar orçamento:", error);
       throw error;
@@ -77,11 +70,11 @@ export const useOrcamentoStore = create<OrcamentoStore>((set, get) => ({
   },
 
   deletarOrcamento: async (id) => {
-    const novosOrcamentos = get().orcamentos.filter((orc) => orc.id !== id);
-
     try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novosOrcamentos));
-      set({ orcamentos: novosOrcamentos });
+      await api.delete(`/orcamentos/${id}`);
+      set((state) => ({
+        orcamentos: state.orcamentos.filter((orc) => orc.id !== id),
+      }));
     } catch (error) {
       console.error("Erro ao deletar orçamento:", error);
       throw error;
