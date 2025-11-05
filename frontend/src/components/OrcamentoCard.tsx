@@ -6,7 +6,7 @@ import { GlassCard } from "./GlassCard";
 import { StatusBadge } from "./StatusBadge";
 import { Orcamento } from "../types";
 import { formatarData, formatarMoeda } from "../utils/formatters";
-import { calcularTotal } from "../utils/calculations";
+import { calcularTotal } from "../utils/calculation";
 import { COLORS } from "../constants/colors";
 
 interface OrcamentoCardProps {
